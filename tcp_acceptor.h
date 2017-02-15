@@ -1,3 +1,7 @@
+#ifndef TCP_ACCEPTOR_H_
+#define TCP_ACCEPTOR_H_
+
+#include <memory>
 #include <string>
 #include <netinet/in.h>
 #include "tcp_stream.h"
@@ -13,5 +17,7 @@ public:
   virtual ~TCPAcceptor();
 
   int start();
-  TCPStream* accept();
+  std::unique_ptr<TCPStream> accept();
 };
+
+#endif

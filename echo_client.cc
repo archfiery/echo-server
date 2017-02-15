@@ -9,8 +9,9 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+
   if (argc != 4) {
-    cerr << "usage: "<< argv[0] << " <port> <ip>" << endl;
+    cerr << "usage: "<< argv[0] << " <port> <ip> <timeout> " << endl;
     return 1;
   }
 
@@ -19,16 +20,18 @@ int main(int argc, char** argv)
   char line[256];
 
   TCPConnector connector;
-  TCPStream* stream(connector.connect(atoi(argv[1]), argv[2]));
 
-  if (stream != nullptr) {
+  unique_ptr<TCPStream> stream = connector.connect(atoi(argv[1]), argv[2]);
+
+  if (stream.get() != nullptr) {
     string msg("hello world, c++ network programming.");
-    stream->send(msg.c_str(), msg.size());
+    auto st = stream.get();
+    st->send(msg.c_str(), msg.size());
     cout << "sent - " << msg << endl;
-    stream->receive(line, sizeof(line), timeout);
+    st->receive(line, sizeof(line), timeout);
     cout << "received - " << line << endl;
-    delete stream;
   }
 
   return 0;
+
 }

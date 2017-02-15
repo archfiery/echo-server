@@ -29,6 +29,10 @@ public:
    * delete copy assignment operator
    */
   TCPStream& operator=(const TCPStream&) = delete;
+
+  TCPStream(TCPStream&& other);
+
+  TCPStream& operator=(TCPStream&& other);
   /**
    * destructor
    */
@@ -45,8 +49,8 @@ public:
     connectionTimeOut = -2
   };
 
-private:
   TCPStream(int sd, struct sockaddr_in* address);
+private:
   bool waitForReadEvent(int timeout);
 };
 
